@@ -119,7 +119,7 @@ export async function onRequestPost(context) {
   
   try {
     const formData = await request.formData();
-    const name = (formData.get('name') || '').trim();
+    const name = (formData.get('username') || '').trim();
     const password = (formData.get('password') || '').trim();
 
     console.log('Login attempt - Username:', name);
