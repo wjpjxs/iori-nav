@@ -246,7 +246,7 @@ export async function onRequest(context) {
   const headingDefaultAttr = escapeHTML(headingPlainText);
   const headingActiveAttr = catalogExists ? escapeHTML(currentCatalogName) : '';
   const submissionEnabled = String(env.ENABLE_PUBLIC_SUBMISSION) === 'true';
-  const submissionClass = submissionEnabled ? '' : 'hidden';
+  const submissionClass = submissionEnabled ? '' : '!hidden';
   const siteName = S.home_site_name || env.SITE_NAME || '灰色轨迹';
   const siteDescription = S.home_site_description || env.SITE_DESCRIPTION || '一个优雅、快速、易于部署的书签（网址）收藏与分享平台，完全基于 Cloudflare 全家桶构建';
   const footerText = S.home_footer_text || env.FOOTER_TEXT || '曾梦想仗剑走天涯';
@@ -335,7 +335,6 @@ export async function onRequest(context) {
   let sidebarToggleClass = '';
   let mobileToggleVisibilityClass = 'lg:hidden';
   let adminIconHtml = '';
-  let submissionIconHtml = '';
   const themeIconHtml = `
     <button id="themeToggleBtn" class="top-action-icon theme-action-icon" title="切换主题">
       <svg id="themeIconSun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
@@ -350,12 +349,6 @@ export async function onRequest(context) {
     sidebarToggleClass = '!hidden';
     mobileToggleVisibilityClass = 'min-[550px]:hidden';
 
-    if (submissionEnabled) {
-      submissionIconHtml = `
-        <button type="button" id="addSiteBtnHorizontal" class="hidden min-[550px]:flex items-center justify-center p-2 rounded-lg bg-white/80 backdrop-blur shadow-md hover:bg-white text-gray-700 hover:text-accent-600 dark:bg-gray-800/80 dark:text-gray-200 dark:hover:text-accent-400 transition-all cursor-pointer" title="公开投稿">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
-        </button>`;
-    }
     if (!S.home_hide_admin) {
       adminIconHtml = `
         <a href="/admin" target="_blank" class="top-action-icon admin-action-icon" title="后台管理">
@@ -368,7 +361,7 @@ export async function onRequest(context) {
       <div class="hidden min-[550px]:block">${horizontalHeaderContent}</div>`;
   }
 
-  const topRightActionsHtml = `<div class="fixed top-4 right-4 z-50 flex items-center gap-3">${submissionIconHtml}${themeIconHtml}${adminIconHtml}</div>`;
+  const topRightActionsHtml = `<div class="fixed top-4 right-4 z-50 flex items-center gap-3">${themeIconHtml}${adminIconHtml}</div>`;
   const leftTopActionHtml = `
     <div class="fixed top-4 left-4 z-50 ${mobileToggleVisibilityClass}">
       <button id="sidebarToggle" class="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700">

@@ -148,11 +148,14 @@
 
 ## 🧪 本地开发
 
-> 本地开发依赖 `wrangler.toml`（该文件已 `.gitignore`），请先填入你自己的 D1/KV 资源 ID。
+> 本地开发依赖 `wrangler.toml`。仓库提供了可提交的 `wrangler.example.toml` 模板，真实配置文件仍会被 `.gitignore` 忽略，避免误提交资源 ID 或密钥。
 
 ```bash
 # 安装依赖（TailwindCSS / Husky）
 npm install
+
+# 复制本地配置模板，并填入你自己的 D1/KV 资源 ID
+cp wrangler.example.toml wrangler.toml
 
 # 构建 CSS（首次或修改 tailwind.css 后执行）
 npm run build:css
@@ -190,13 +193,15 @@ npx wrangler d1 execute book --local --file=schema.sql
 | `FOOTER_TEXT` | `曾梦想仗剑走天涯` | 首页页脚文案 |
 | `ICON_API` | `https://faviconsnap.com/api/favicon?url=` | 自动补全 logo 的接口前缀 |
 | `AI_REQUEST_DELAY` | `1500` | AI 一键补全描述调用间隔（毫秒） |
+| `TURNSTILE_SITE_KEY` | 空 | Cloudflare Turnstile 站点密钥；与 `TURNSTILE_SECRET_KEY` 同时配置后启用后台登录与公开投稿人机验证 |
+| `TURNSTILE_SECRET_KEY` | 空 | Cloudflare Turnstile 机密密钥；与 `TURNSTILE_SITE_KEY` 同时配置后启用后台登录与公开投稿人机验证 |
 
 > `DISPLAY_CATEGORY` 已废弃，当前版本不会读取该变量。
 
 ### 3) 配置优先级说明
 
 - 首页名称/副标题等支持后台设置项的字段，优先读取数据库 `settings`，环境变量作为兜底。
-- `AI_REQUEST_DELAY` 在代码中的默认兜底为 `1500`；本地 `wrangler.toml` 示例值为 `500`，可按 API 限频自行调整。
+- `AI_REQUEST_DELAY` 在代码中的默认兜底为 `1500`；本地可按 API 限频自行调整。
 
 > **💡 提示**：如使用免费的 Gemini API Key（模型 `gemini-2.5-flash-lite`），频率限制为 15 次/分钟，请根据实际情况调整 `AI_REQUEST_DELAY`。
 
@@ -205,6 +210,8 @@ npx wrangler d1 execute book --local --file=schema.sql
 > 后台管理页面地址为：`https://你的域名/admin`
 
 后台登录凭据存放在 `NAV_AUTH` KV 中的 `admin_username` 与 `admin_password` 两个键内。登录 `/admin` 时需要在页面表单中输入账号与密码，系统会返回一个 **HttpOnly 会话 Cookie（默认 1 天，可选 1/7/30/60/90 天）**，无需也不再支持在 URL 查询参数中传递凭据。点击后台右上角的 **"退出登录"** 按钮即可立即销毁会话。
+
+如需给后台登录与公开投稿增加 Cloudflare Turnstile 人机验证，请在 Cloudflare Turnstile 控制台创建站点后，将站点密钥配置为 `TURNSTILE_SITE_KEY`，机密密钥配置为 `TURNSTILE_SECRET_KEY`。两个变量都为空时会保持原流程；只配置其中一个会提示配置不完整。
 
 ---
 

@@ -100,8 +100,8 @@ html.dark body.custom-wallpaper::before {
 /* 2. 侧边栏深色玻璃化 */
 html.dark body.custom-wallpaper .sidebar {
     background-color: rgba(17, 24, 39, 0.85) !important;
-    backdrop-filter: blur(var(--frosted-glass-blur, 15px));
-    -webkit-backdrop-filter: blur(var(--frosted-glass-blur, 15px));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
@@ -742,8 +742,8 @@ body:not(.app-ready) #sidebar a[href="?catalog=all"] {
 /* Light Mode + Wallpaper Sidebar Optimization */
 html:not(.dark) body.custom-wallpaper .sidebar {
     background-color: rgba(255, 255, 255, 0.4) !important;
-    backdrop-filter: blur(var(--frosted-glass-blur, 15px));
-    -webkit-backdrop-filter: blur(var(--frosted-glass-blur, 15px));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }

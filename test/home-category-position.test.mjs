@@ -38,7 +38,7 @@ function createStatement(sql, settingsRows) {
   };
 }
 
-async function renderHome(settingsRows = []) {
+async function renderHome(settingsRows = [], envOverrides = {}) {
   const response = await onRequest({
     request: new Request('https://example.com/?render-test=1'),
     env: {
@@ -63,6 +63,7 @@ async function renderHome(settingsRows = []) {
       SITE_DESCRIPTION: 'Unit Description',
       FOOTER_TEXT: 'Unit Footer',
       ENABLE_PUBLIC_SUBMISSION: 'false',
+      ...envOverrides,
     },
     waitUntil() {},
   });
@@ -70,6 +71,15 @@ async function renderHome(settingsRows = []) {
   assert.equal(response.status, 200);
   return response.text();
 }
+
+test('home renders floating submission button only when public submission is enabled', async () => {
+  const disabledHtml = await renderHome();
+  const enabledHtml = await renderHome([], { ENABLE_PUBLIC_SUBMISSION: 'true' });
+
+  assert.match(disabledHtml, /id="addSiteBtnFloating" class="!hidden fixed bottom-24/);
+  assert.match(enabledHtml, /id="addSiteBtnFloating" class=" fixed bottom-24/);
+  assert.equal(enabledHtml.includes('addSiteBtnHorizontal'), false);
+});
 
 test('home category navigation defaults below the search box', async () => {
   const html = await renderHome();
